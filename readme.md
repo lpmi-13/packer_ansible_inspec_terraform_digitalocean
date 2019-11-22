@@ -1,18 +1,20 @@
-# Packer, Ansible, Inspec and Terraform on AWS
+# Packer, Ansible, Inspec and Terraform on Digital Ocean
 
-A working demo application created using Packer, Ansible, Inspec and Terraform, deployed to AWS.
+*Based on the excellent work at https://github.com/gordonmurray/packer_ansible_inspec_terraform_aws*
+
+A working demo application created using Packer, Ansible, Inspec and Terraform, deployed to Digital Ocean.
 
 The purpose of this demo app is to show a working example of these tools working together.
 
-The end result is a simple Hello World script running on an EC2 instance on AWS.
+The end result is a simple Hello World script running on a droplet instance in Digital Ocean.
 
-* [Packer](https://www.packer.io/) is used to create an Amazon Machine Image (AMI). An AMI is like a prepared EC2 instance that has not been started up yet.
+* [Packer](https://www.packer.io/) is used to create a snapshot image on Digital Ocean. You can then use that custom image as the base for spinning up a droplet.
 
 * [Ansible](https://www.ansible.com/) is used within Packer to install some neccessary services while Packer is building the image.
 
-* [Inspec](https://www.inspec.io/) is used within Packer also, to perform some verfification steps to make sure Packer and Ansible have created the Image as expected.
+* [Inspec](https://www.inspec.io/) is used within Packer also, to perform some verfification steps to make sure Packer and Ansible have created the image as expected.
 
-* [Terraform](https://www.terraform.io/) is used to create the minimum AWS infrastructure we need. It will use the Image created by Packer and create a small running EC2 instance within a new VPC.
+* [Terraform](https://www.terraform.io/) is used to create the minimum Digital Ocean infrastructure we need. It will use the image created by Packer and create a small running droplet instance on Digital Ocean.
 
 ## A short video of the Packer, Ansible and Inspec stage
 
@@ -24,7 +26,7 @@ The end result is a simple Hello World script running on an EC2 instance on AWS.
 
 ## Before you begin, You will need
 
-* You will need an AWS account and your [AWS account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html#FindingYourAWSId)
+* You will need a Digital Ocean account and your [Digital Ocean API Key](https://www.digitalocean.com/community/tutorials/how-to-use-the-digitalocean-api-v2#HowToGenerateaPersonalAccessToken)
 * [Packer](https://www.packer.io/) installed locally
 * [Terraform](https://www.terraform.io/) installed locally
 * [Inspec](https://www.inspec.io/) installed locally
@@ -50,9 +52,11 @@ aws_secret_access_key = Your_SecretAccessKey
 ## Usage
 
 1. Clone this repo
-2. Add your AWS Account ID to terraform/terraform.tfvars
+2. Add your Digital Ocean API key to terraform/terraform.tfvars
 3. Validate Packer using : `packer validate -var-file=packer/variables.json packer/server.json`
+(packer evaluates the file paths in the server.json from where the `packer validate`  command is run, so that might be the cause of an error if you run it in the wrong place)
 4. Build the AMI with Packer using : `packer build -var-file=packer/variables.json packer/server.json`
+(be sure that the `API_TOKEN` environment variable has been exported first, or it will fail)
 5. Deploy the image with Terraform using:
 * `cd /terraform`
 * `terraform init`
