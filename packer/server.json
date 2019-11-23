@@ -1,6 +1,6 @@
 {
     "variables": {
-      "api_token":"{{env `API_TOKEN`}}",
+      "api_token":"{{env `DIGITALOCEAN_API_TOKEN`}}",
       "region":""
     },
     "builders": [{
@@ -50,7 +50,8 @@
     },
     {
       "type": "inspec",
-      "profile": "inspec/controls/nginx.rb"
+      "profile": "inspec/controls/nginx.rb",
+      "inspec_env_vars": [ "CHEF_LICENSE=accept" ]
     }
     ]
   }

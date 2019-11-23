@@ -1,3 +1,13 @@
+- name: create ubuntu group
+  group:
+    name: ubuntu
+    state: present
+
+- name: create ubuntu user
+  user:
+    name: ubuntu
+    group: ubuntu
+
 - name: Set /var/www ownership
   file:
     path: /var/www

@@ -16,20 +16,13 @@ The end result is a simple Hello World script running on a droplet instance in D
 
 * [Terraform](https://www.terraform.io/) is used to create the minimum Digital Ocean infrastructure we need. It will use the image created by Packer and create a small running droplet instance on Digital Ocean.
 
-## A short video of the Packer, Ansible and Inspec stage
-
-[![asciicast](https://asciinema.org/a/aO3KtTeRAmQNJy5QZ2UJRAv0Z.svg)](https://asciinema.org/a/aO3KtTeRAmQNJy5QZ2UJRAv0Z)
-
-## A short video of the Terraform stage
-
-[![asciicast](https://asciinema.org/a/282235.svg)](https://asciinema.org/a/282235)
-
 ## Before you begin, You will need
 
 * You will need a Digital Ocean account and your [Digital Ocean API Key](https://www.digitalocean.com/community/tutorials/how-to-use-the-digitalocean-api-v2#HowToGenerateaPersonalAccessToken)
 * [Packer](https://www.packer.io/) installed locally
 * [Terraform](https://www.terraform.io/) installed locally
 * [Inspec](https://www.inspec.io/) installed locally
+(if installing as a gem, be sure to install both `inspec` and `inspec-bin`)
 
 ## Create an AWS user
 
@@ -52,13 +45,14 @@ aws_secret_access_key = Your_SecretAccessKey
 ## Usage
 
 1. Clone this repo
-2. Add your Digital Ocean API key to terraform/terraform.tfvars
-3. Validate Packer using : `packer validate -var-file=packer/variables.json packer/server.json`
+1. Validate Packer using : `packer validate -var-file=packer/variables.json packer/server.json`
 (packer evaluates the file paths in the server.json from where the `packer validate`  command is run, so that might be the cause of an error if you run it in the wrong place)
-4. Build the AMI with Packer using : `packer build -var-file=packer/variables.json packer/server.json`
-(be sure that the `API_TOKEN` environment variable has been exported first, or it will fail)
-5. Deploy the image with Terraform using:
+1. Build the snapshot image with Packer using : `packer build -var-file=packer/variables.json packer/server.json`
+(be sure that the `DIGITALOCEAN_API_TOKEN` environment variable has been exported first, or it will fail)
+1. Deploy the image with Terraform using:
 * `cd /terraform`
+
+(be sure that the `TF_VAR_do_api_token` environment variable has been exported and set to the same value as `DIGITALOCEAN_API_TOKEN`)
 * `terraform init`
 * `terraform apply`
 
