@@ -12,40 +12,23 @@ The end result is a simple Hello World script running on a droplet instance in D
 
 * [Ansible](https://www.ansible.com/) is used within Packer to install some neccessary services while Packer is building the image.
 
-* [Inspec](https://www.inspec.io/) is used within Packer also, to perform some verfification steps to make sure Packer and Ansible have created the image as expected.
+* [Inspec](https://www.inspec.io/) is used within Packer also, to perform some verification steps to make sure Packer and Ansible have created the image as expected.
 
 * [Terraform](https://www.terraform.io/) is used to create the minimum Digital Ocean infrastructure we need. It will use the image created by Packer and create a small running droplet instance on Digital Ocean.
 
 ## Before you begin, You will need
 
-* You will need a Digital Ocean account and your [Digital Ocean API Key](https://www.digitalocean.com/community/tutorials/how-to-use-the-digitalocean-api-v2#HowToGenerateaPersonalAccessToken)
+* a Digital Ocean account and your [Digital Ocean API Key](https://www.digitalocean.com/community/tutorials/how-to-use-the-digitalocean-api-v2#HowToGenerateaPersonalAccessToken)
 * [Packer](https://www.packer.io/) installed locally
 * [Terraform](https://www.terraform.io/) installed locally
 * [Inspec](https://www.inspec.io/) installed locally
 (if installing as a gem, be sure to install both `inspec` and `inspec-bin`)
 
-## Create an AWS user
-
-Use the following steps to create a new user in your AWS account and give it permission to create EC2 instances and Route53 zones. This will be used by Packer and Terraform to create an AMI and an EC2 instance.
-
-* `aws iam create-user --user-name example`
-* `aws iam create-access-key --user-name example`
-* ( Make sure to save the AccessKeyId and SecretAccessKey from the output)
-* `aws iam attach-user-policy --policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess --user-name example`
-* `aws iam attach-user-policy --policy-arn arn:aws:iam::aws:policy/AmazonRoute53FullAccess --user-name example`
-* Create a file at ~/.aws/credentials with the following content: 
-
-```
-[example]
-aws_access_key_id = Your_AccessKeyId
-aws_secret_access_key = Your_SecretAccessKey
-```
-* Copy your public key so Terraform can use it to create a .pem file which you can use to SSH in to the EC2 instance if needed: `cat ~/.ssh/id_rsa.pub > ../terraform/files/id_rsa.pub`
-
 ## Usage
 
 1. Clone this repo
 1. Validate Packer using : `packer validate -var-file=packer/variables.json packer/server.json`
+
 (packer evaluates the file paths in the server.json from where the `packer validate`  command is run, so that might be the cause of an error if you run it in the wrong place)
 1. Build the snapshot image with Packer using : `packer build -var-file=packer/variables.json packer/server.json`
 
@@ -64,17 +47,6 @@ aws_secret_access_key = Your_SecretAccessKey
 
 `terraform destroy`
 
-### Delete the AWS IAM user
+### Delete the Digital Ocean snapshot
 
-`aws iam  delete-user --user-name example`
-
-### Delete the AMI created by Packer
-
-First, get the AMI ID value using:
-
-`aws ec2 describe-images --filters "Name=tag:Name,Values=example.com" --profile=example --region=eu-west-1 --query 'Images[*].{ID:ImageId}'`
-
-### Then delete the AMI
-
-`aws ec2 deregister-image --image-id ami-<value>`
-
+(only possible via the Digital Ocean command line or web UI, so not dealing with that here)
