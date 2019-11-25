@@ -48,7 +48,9 @@ aws_secret_access_key = Your_SecretAccessKey
 1. Validate Packer using : `packer validate -var-file=packer/variables.json packer/server.json`
 (packer evaluates the file paths in the server.json from where the `packer validate`  command is run, so that might be the cause of an error if you run it in the wrong place)
 1. Build the snapshot image with Packer using : `packer build -var-file=packer/variables.json packer/server.json`
-(be sure that the `DIGITALOCEAN_API_TOKEN` environment variable has been exported first, or it will fail)
+
+(be sure that the `DIGITALOCEAN_API_TOKEN` environment variable has been exported first, or it will fail...also grab the ID of the snapshot to use in terraform. This will be in the output at the end of the build process)
+
 1. Deploy the image with Terraform using:
 * `cd /terraform`
 

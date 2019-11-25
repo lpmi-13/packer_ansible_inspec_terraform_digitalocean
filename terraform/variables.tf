@@ -1,10 +1,6 @@
 # Variables used
-variable "aws_account_id" {
-  // read from terraform.tfvars
-  type = "string"
-}
 
-variable "default_instance_type" {
+variable "default_droplet_size" {
   // read from terraform.tfvars
   type = "string"
 }

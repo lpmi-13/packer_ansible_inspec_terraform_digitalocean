@@ -1,5 +1,5 @@
-provider "aws" {
-  region                  = "eu-west-1"
-  shared_credentials_file = "~/.aws/credentials"
-  profile                 = "example"
+variable "do_api_token" {}
+
+provider "digitalocean" {
+  token                   = var.do_api_token
 }

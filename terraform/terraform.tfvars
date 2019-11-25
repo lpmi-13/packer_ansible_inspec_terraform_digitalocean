@@ -1,5 +1,3 @@
-# aws account ID
-aws_account_id = ""
 
 # apply changes immediately?
 apply_immediately = "true"
@@ -8,7 +6,7 @@ apply_immediately = "true"
 encryption_at_rest = true
 
 # region
-default_region = "eu-west-1"
+default_region = "lon1"
 
-# for most ec2 instances
-default_instance_type = "t2.nano"
+# smalles size droplet
+default_droplet_size = "s-1vcpu-1gb"
